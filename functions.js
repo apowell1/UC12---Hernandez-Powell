@@ -4,30 +4,30 @@
 * @param {string} start The starting string
 * @param {string} end The ending string
 * @return {string} The string in between
-* @throws (Error} If start or end not found
 */
 function between(string, start, end) {
     var startAt = string.indexOf(start);
 
     if (startAt == -1) {
-        throw new Error("No start found: " + start);
+        return undefined;
     }
 
     startAt += start.length;
     var endAt = string.indexOf(end, startAt);
 
     if (endAt == -1) {
-        throw new Error("No end found: " + end);
+        return undefined;
     }
 
     return string.slice(startAt, endAt);
 }
+
 /**
- * Returns an area code from a phone number: (###) ###-####
+ * Returns an area code from a phone number
  * @param   {string} phoneNum The phone number
  * @returns {string} The area code
- * @throws {Error} If the format is incorrect
  */
+
 function getAreaCode(phoneNum) {
 
     var areaCode;
@@ -58,7 +58,6 @@ function displayAreaCode(inputId, outputId) {
     try {
         var areaCode = getAreaCode(phoneNum);
         outputText = "Your area code is " + areaCode;
-        var valid = validPhone(phoneNum);
     } catch (error) {
         console.log(error.message);
         outputText = error.message;
@@ -67,19 +66,33 @@ function displayAreaCode(inputId, outputId) {
     document.getElementById(outputId).innerHTML = outputText;
 }
 
-function validPhone(number) {
-    var numLength = number.length;
-       if (number.slice(9, 10) != "-") {
-         return false;
+function getCoCode(phoneNum) {
+
+    var coCode;
+    try {
+        coCode = between(phoneNum, ")","-");
+        coCode = coCode.trim();
+        if (coCode.length == 3 && Number(coCode)) {
+            return coCode;
+        } else {
+            throw new Error("Invalid CO Code: " + coCode);
+
         }
-    var arr = number.split ("-");
-    var array = number.split (")");
-    var first = arr[0].length;
-    var second = arr[1].length;
-    var third = array[0].length;
-    if (numLength == 14 && first == 9 && second == 4 && third == 4 && arr[0].slice(1,4) <= 999 && array[1].slice(0,3) <= 999 && arr[1] <= 9999) {
-            return true;
-    } else {
-           return false;
-    }
+        } catch (error) {
+            throw new Error("Invalid phone number: " + error.message);
+        }
 }
+
+function displayCoCode(inputId, outputId) {
+    var outputText = "";
+    var phoneNum = document.getElementById(inputId).value;
+
+    try {
+        var coCode = getCoCode(phoneNum);
+        outputText = "Your CO code is " + coCode;
+    } catch (error) {
+        console.log(error.message);
+        outputText = error.message;
+    }
+    document.getElementById(outputId).innerHTML = outputText;
+    }
