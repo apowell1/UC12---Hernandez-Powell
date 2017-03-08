@@ -9,13 +9,13 @@
     <script src="functions.js"></script>
 </head>
 <body>
-    <p>Please enter your Phone Number:</p>
+    <p>Please enter your Phone Number ((###)###-####):</p>
     <input type="text" id="phone">
     <p/>
-   <input type="button" onclick="displayAreaCode('phone', 'outputArea')" "validPhone('phone')" value="Validate Area.">
-    <input type="button" onclick="displayCoCode('phone', 'outputCo')" "validPhone('phone')" value="Validate CO.">
+   <input type="button" onclick="displayAreaCode('phone', 'outputArea'), displayCoCode('phone', 'outputCO'), displayLineCode('phone', 'outputLine')" value="Validate.">
    <p/>
-   <div id="outputArea"></div>
-   <div id="outputCo"></div>
+   <div id = "outputArea"></div>
+   <div id = "outputCO"></div>
+   <div id = "outputLine"></div>
 </body>
 </html>
