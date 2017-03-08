@@ -22,8 +22,9 @@ function between(string, start, end) {
 
     return string.slice(startAt, endAt);
 }
+
 /**
- * Returns an area code from a phone number: (###) ###-####
+ * Returns an area code from a phone number: (###)###-####
  * @param   {string} phoneNum The phone number
  * @returns {string} The area code
  * @throws {Error} If the format is incorrect
@@ -46,6 +47,51 @@ function getAreaCode(phoneNum) {
 }
 
 /**
+ * Returns an CO code from a phone number: (###)###-####
+ * @param   {string} phoneNum The phone number
+ * @returns {string} The CO code
+ * @throws {Error} If the format is incorrect
+ */
+function getCoCode(phoneNum) {
+
+    var coCode;
+
+    try {
+        coCode = between(phoneNum, ")", "-");
+        coCode = coCode.trim();
+        if (coCode.length == 3 && Number(coCode)) {
+            return coCode;
+        } else {
+            throw new Error("Invalid CO code: " + coCode);
+        }
+    } catch (error) {
+        throw new Error("Invalid phone number: " + error.message);
+    }
+}
+
+/**
+ * Returns a line code from a phone number: (###)###-####
+ * @param   {string} phoneNum The phone number
+ * @returns {string} The line code
+ * @throws {Error} If the format is incorrect
+ */
+function getLineCode(phoneNum) {
+
+    var lineCode;
+
+    try {
+        lineCode = phoneNum.slice(9);
+        if (lineCode.length == 4 && Number(lineCode)) {
+            return lineCode;
+        } else {
+            throw new Error("Invalid line code: " + LineCode);
+        }
+    } catch (error) {
+        throw new Error("Invalid phone number: " + error.message);
+    }
+}
+
+/**
  * Displays the area code for an inputted phone number
  * @param {string} inputId  The element id for the text box
  * @param {string} outputId The element id of message div
@@ -58,7 +104,6 @@ function displayAreaCode(inputId, outputId) {
     try {
         var areaCode = getAreaCode(phoneNum);
         outputText = "Your area code is " + areaCode;
-        var valid = validPhone(phoneNum);
     } catch (error) {
         console.log(error.message);
         outputText = error.message;
@@ -67,19 +112,45 @@ function displayAreaCode(inputId, outputId) {
     document.getElementById(outputId).innerHTML = outputText;
 }
 
-function validPhone(number) {
-    var numLength = number.length;
-       if (number.slice(9, 10) != "-") {
-         return false;
-        }
-    var arr = number.split ("-");
-    var array = number.split (")");
-    var first = arr[0].length;
-    var second = arr[1].length;
-    var third = array[0].length;
-    if (numLength == 14 && first == 9 && second == 4 && third == 4 && arr[0].slice(1,4) <= 999 && array[1].slice(0,3) <= 999 && arr[1] <= 9999) {
-            return true;
-    } else {
-           return false;
+/**
+ * Displays the CO code for an inputted phone number
+ * @param {string} inputId  The element id for the text box
+ * @param {string} outputId The element id of message div
+ */
+function displayCoCode(inputId, outputId) {
+    var outputText = "";
+    var phoneNum = document.getElementById(inputId).value;
+
+    // Now try to get the code
+    try {
+        var coCode = getCoCode(phoneNum);
+        outputText = "Your CO code is " + coCode;
+    } catch (error) {
+        console.log(error.message);
+        outputText = error.message;
     }
+
+    document.getElementById(outputId).innerHTML = outputText;
 }
+
+/**
+ * Displays the line code for an inputted phone number
+ * @param {string} inputId  The element id for the text box
+ * @param {string} outputId The element id of message div
+ */
+function displayLineCode(inputId, outputId) {
+    var outputText = "";
+    var phoneNum = document.getElementById(inputId).value;
+
+    // Now try to get the code
+    try {
+        var lineCode = getLineCode(phoneNum);
+        outputText = "Your line code is " + lineCode;
+    } catch (error) {
+        console.log(error.message);
+        outputText = error.message;
+    }
+
+    document.getElementById(outputId).innerHTML = outputText;
+}
+
